@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Provider profile — The Wedding Company</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="logo" href="index.html">The Wedding Company<small>A path to unity</small></a>
+      <nav class="links">
+        <a href="providers.html">Providers</a>
+        <a href="login.html" class="login-link">Log in</a>
+      </nav>
+    </div>
+  </header>
+  <main class="page wrap">
+    <p class="sans" style="letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#8b3e2f">Provider</p>
+    <h1 style="opacity:1;animation:none;max-width:16ch">Your listing</h1>
+    <p class="lede">This is what a couple sees when they open you. Fill it properly. You confirm every booking.</p>
+    <form class="form-wide" id="pform">
+      <div class="sec"><h3>Business</h3>
+        <div class="grid2">
+          <div><label for="bname">Business name</label><input id="bname" required /></div>
+          <div><label for="city">City</label><input id="city" required /></div>
+        </div>
+        <label for="address">Address</label><input id="address" placeholder="Street, city, postcode" />
+        <label for="about">About</label><textarea id="about" rows="4"></textarea>
+      </div>
+      <div class="sec"><h3>Main contact</h3>
+        <div class="grid2">
+          <div><label for="contact">Name</label><input id="contact" /></div>
+          <div><label for="phone">Phone</label><input id="phone" type="tel" /></div>
+        </div>
+        <label for="email">Email</label><input id="email" type="email" />
+      </div>
+      <div class="sec"><h3>Services</h3>
+        <div class="ticks">
+          <label><input type="checkbox" name="svc" value="Wedding hall"> Wedding hall</label>
+          <label><input type="checkbox" name="svc" value="Catering"> Catering</label>
+          <label><input type="checkbox" name="svc" value="Photography"> Photography</label>
+          <label><input type="checkbox" name="svc" value="Videography"> Videography</label>
+          <label><input type="checkbox" name="svc" value="Makeup / hair"> Makeup / hair</label>
+          <label><input type="checkbox" name="svc" value="Florist"> Florist</label>
+          <label><input type="checkbox" name="svc" value="Cars"> Cars</label>
+          <label><input type="checkbox" name="svc" value="Decor"> Decor</label>
+          <label><input type="checkbox" name="svc" value="Entertainment"> Entertainment</label>
+          <label><input type="checkbox" name="svc" value="Other"> Other</label>
+        </div>
+      </div>
+      <div class="sec"><h3>Photos and video</h3>
+        <label for="photos">Photos</label><input id="photos" type="file" accept="image/*" multiple />
+        <label for="video">Video link</label><input id="video" placeholder="https://" />
+      </div>
+      <div class="sec"><h3>The day</h3>
+        <div class="grid2">
+          <div><label for="capacity">Max guests</label><input id="capacity" /></div>
+          <div><label for="price">Price from</label><input id="price" /></div>
+          <div><label for="rooms">Spaces</label><input id="rooms" /></div>
+          <div><label for="parking">Parking</label><input id="parking" /></div>
+        </div>
+        <label>Ceremony on site</label>
+        <div class="ticks">
+          <label><input type="checkbox" name="cer" value="Civil"> Civil</label>
+          <label><input type="checkbox" name="cer" value="Religious"> Religious</label>
+          <label><input type="checkbox" name="cer" value="Reception only"> Reception only</label>
+        </div>
+        <label for="catering">Food</label><input id="catering" />
+        <label for="access">Access</label><input id="access" />
+        <div class="grid2">
+          <div><label for="lead">Typical lead time</label><input id="lead" /></div>
+          <div><label for="days">Days you take</label><input id="days" /></div>
+        </div>
+        <label for="ig">Website or Instagram</label><input id="ig" />
+      </div>
+      <button class="btn solid ready" type="submit">Save listing</button>
+      <p class="notice" id="saved"></p>
+    </form>
+  </main>
+  <footer class="wrap"><span>The Wedding Company</span><span><a href="providers.html">See how a listing looks</a></span></footer>
+  <script>
+    pform.onsubmit = (e) => { e.preventDefault(); saved.textContent = "Saved on this device for now. Open Providers to see the public layout."; };
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>
