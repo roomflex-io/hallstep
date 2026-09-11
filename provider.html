@@ -17,16 +17,14 @@
     </div>
   </header>
   <div id="root"></div>
-  <footer class="wrap"><span>The Wedding Company</span><span><a href="privacy.html">Privacy</a></span></footer>
+  <footer class="wrap"><span>The Wedding Company</span></footer>
   <script src="providers-data.js"></script>
   <script>
     const id = new URLSearchParams(location.search).get("id") || PROVIDERS[0].id;
     const p = PROVIDERS.find(x => x.id === id) || PROVIDERS[0];
     document.title = p.name + " — The Wedding Company";
-    const pics = (p.photos || []).filter(Boolean);
     root.innerHTML = `
       <section class="hero short">
-        ${pics[0] ? `<img src="${pics[0]}" alt="">` : ""}
         <div class="shade"></div>
         <div class="hero-copy">
           <p class="kicker">${p.services.join(" · ")}</p>
@@ -35,11 +33,11 @@
         </div>
       </section>
       <main class="page wrap">
-        ${pics.length ? `<div class="gallery">${pics.map((src,i)=>`<div class="${i===0?"tall":""}"><img src="${src}" alt=""></div>`).join("")}</div>` : "<p class=\"lede\">No venue photos yet. They go up when the hall sends them.</p>"}
+        <p class="lede">No venue photos yet. They go up when the hall or mosque sends them.</p>
         <div class="legal" style="max-width:60ch;margin-top:22px"><p>${p.about}</p></div>
         <div class="facts">
           <div class="fact"><b>Address</b>${p.address}</div>
-          <div class="fact"><b>Main contact</b>${p.contact}${p.phone ? "<br>"+p.phone : ""}${p.email ? "<br>"+p.email : ""}</div>
+          <div class="fact"><b>Contact</b>${[p.contact,p.phone,p.email].filter(Boolean).join("<br>")}</div>
           <div class="fact"><b>Capacity</b>${p.capacity}</div>
           <div class="fact"><b>Price</b>${p.priceFrom}</div>
           <div class="fact"><b>Ceremony</b>${p.ceremony}</div>
@@ -47,7 +45,6 @@
           <div class="fact"><b>Spaces</b>${p.rooms}</div>
           <div class="fact"><b>Food</b>${p.catering}</div>
         </div>
-        <p class="lede">Send an enquiry. They confirm the booking.</p>
         <a class="btn solid ready" href="contact.html">Send an enquiry</a>
       </main>`;
   </script>
