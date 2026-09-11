@@ -1,12 +1,81 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Hallstep — UK wedding halls</title>
-<link rel="stylesheet" href="#">
-</head>
+<style>
+:root{--c:#f3ece1;--p:#fffaf3;--i:#1b1511;--m:#6d6459;--l:#e3d6c4;--r:#b4452e;--g:#8f6a3a;--ok:#2f6b45}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;background:var(--c);color:var(--i);line-height:1.45}
+button{font:inherit}img{display:block;max-width:100%}
+.wrap{width:min(1100px,calc(100% - 28px));margin:0 auto}
+nav{padding:16px 0;font-family:Georgia,serif;font-size:28px}.logo span{color:var(--r);font-style:italic}
+.hero{position:relative;border-radius:22px;overflow:hidden;min-height:380px;background:#2a211c;margin:6px auto 22px;width:min(1100px,calc(100% - 28px))}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.8))}
+.hero-copy{position:relative;z-index:2;color:#fff;padding:64px 24px 28px;max-width:640px}
+.eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#e8c98a;margin-bottom:10px}
+h1{font-family:Georgia,serif;font-weight:500;font-size:clamp(32px,8vw,60px);line-height:.98}
+.lead{margin:12px 0 0;color:#f0e6d8}
+.panel{background:var(--p);border:1px solid var(--l);border-radius:20px;padding:20px;margin:0 auto 16px;width:min(1100px,calc(100% - 28px))}
+h2{font-family:Georgia,serif;font-weight:500;font-size:clamp(24px,6vw,36px);margin:4px 0 8px}
+.k{color:var(--g);font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.cer-grid,.pills{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+@media(min-width:800px){.cer-grid{grid-template-columns:repeat(4,1fr)}.pills{grid-template-columns:repeat(3,1fr)}}
+.cer{position:relative;height:130px;border-radius:14px;overflow:hidden;border:3px solid transparent;background:#c9b9a4}
+.cer.on{border-color:var(--r)}.cer img{width:100%;height:100%;object-fit:cover}
+.cer b{position:absolute;left:0;right:0;bottom:0;padding:20px 8px 8px;background:linear-gradient(transparent,#000);color:#fff;font-size:13px}
+.pill{border:1px solid var(--l);border-radius:14px;padding:12px;background:#f6efe3;text-align:left}
+.pill.on{border-color:#111;background:#fff}.pill span{display:block;color:var(--m);font-size:12px}
+.btn{background:var(--r);color:#fff;border:0;border-radius:999px;padding:12px 16px;font-weight:600;margin-top:14px}
+.hall{background:#fff;border:1px solid var(--l);border-radius:16px;overflow:hidden;margin:12px 0}
+.hall img{width:100%;height:160px;object-fit:cover}.info{padding:14px}
+.info h3{font-family:Georgia,serif;font-size:22px;font-weight:500}.meta{color:var(--m);font-size:13px}
+.price{font-family:Georgia,serif;font-size:22px;margin-top:6px}
+.avail{color:var(--ok);font-size:13px}
+footer{padding:20px;text-align:center;color:var(--m);font-size:12px}
+</style></head>
 <body>
-<p>placeholder</p>
-</body>
-</html>
+<header class="wrap"><nav class="logo">Hall<span>step</span></nav></header>
+<section class="hero">
+<img alt="" src="https://images.unsplash.com/photo-1519167758481-83f29da8c2b0?auto=format&fit=crop&w=1400&q=70"/>
+<div class="shade"></div>
+<div class="hero-copy"><p class="eyebrow">United Kingdom · every faith</p>
+<h1>Tell us the ceremony. We’ll show the halls.</h1>
+<p class="lead">Nikah, mandap, Anand Karaj, chuppah, church, civil, humanist or interfaith.</p></div>
+</section>
+<section class="panel"><p class="k">Step 1</p><h2>Ceremony</h2><div class="cer-grid" id="cerGrid"></div></section>
+<section class="panel"><p class="k">Step 2</p><h2>Local or another city?</h2><div class="pills" id="locGrid"></div></section>
+<section class="panel"><p class="k">Step 3</p><h2>Roughly when</h2><div class="pills" id="whenGrid"></div>
+<button class="btn" type="button" id="showBtn">Show available halls</button></section>
+<section class="panel" id="results"><p class="k">Available halls</p><h2 id="resultTitle">Halls</h2><div id="hallList"></div></section>
+<footer>hallstep · github.com/roomflex-io/hallstep</footer>
+<script>
+const C=[{id:'civil',n:'Civil',i:'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600'},{id:'coe',n:'Christian / C of E',i:'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=600'},{id:'catholic',n:'Catholic',i:'https://images.unsplash.com/photo-1473177104440-ffee2f376098?w=600'},{id:'islam',n:'Islamic / Nikah',i:'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=600'},{id:'hindu',n:'Hindu',i:'https://images.unsplash.com/photo-1587271636175-90d58cdad458?w=600'},{id:'sikh',n:'Sikh',i:'https://images.unsplash.com/photo-1604594849809-dfedbc827105?w=600'},{id:'jewish',n:'Jewish',i:'https://images.unsplash.com/photo-1519741497674-611481863552?w=600'},{id:'humanist',n:'Humanist',i:'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600'},{id:'interfaith',n:'Interfaith',i:'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600'},{id:'reception',n:'Reception only',i:'https://images.unsplash.com/photo-1519167758481-83f29da8c2b0?w=600'}];
+const P=[{id:'local',t:'Near me'},{id:'London',t:'London'},{id:'Birmingham',t:'Birmingham'},{id:'Manchester',t:'Manchester'},{id:'Leicester',t:'Leicester'},{id:'Bradford',t:'Bradford / Leeds'},{id:'Glasgow',t:'Glasgow'},{id:'Edinburgh',t:'Edinburgh'},{id:'Cardiff',t:'Cardiff'},{id:'Bristol',t:'Bristol'},{id:'anywhere',t:'Anywhere UK'}];
+const W=[{id:'spring',t:'Spring'},{id:'summer',t:'Summer'},{id:'autumn',t:'Autumn'},{id:'winter',t:'Winter'},{id:'weekday',t:'Weekday-ish'},{id:'flexible',t:'Flexible'}];
+const H=[{n:'Al Noor Banquet',c:'Birmingham',a:'Small Heath',g:400,p:4500,cer:['islam','reception'],img:'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800'},{n:'Nikah House East',c:'London',a:'Whitechapel',g:90,p:1800,cer:['islam'],img:'https://images.unsplash.com/photo-1564769625905-50e93615e769?w=800'},{n:'Pearl Mandap Hall',c:'Leicester',a:'Belgrave',g:350,p:5200,cer:['hindu','sikh','reception'],img:'https://images.unsplash.com/photo-1587271636175-90d58cdad458?w=800'},{n:'Chelsea Old Town Hall',c:'London',a:'Chelsea',g:180,p:6500,cer:['civil','humanist','reception'],img:'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800'},{n:'The Oak Barn',c:'local',a:'Kent',g:140,p:5400,cer:['civil','humanist','reception'],img:'https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=800'},{n:'Guru Nanak Hall',c:'Bradford',a:'Bradford',g:450,p:4800,cer:['sikh','hindu','reception'],img:'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800'},{n:'The Chuppah Suite',c:'London',a:'North London',g:200,p:7800,cer:['jewish','reception'],img:'https://images.unsplash.com/photo-1519741497674-611481863552?w=800'},{n:'St Mary\'s Hall',c:'Bristol',a:'Clifton',g:140,p:2900,cer:['coe','catholic','reception'],img:'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=800'},{n:'Whitworth Hall',c:'Manchester',a:'Oxford Road',g:360,p:7200,cer:['civil','humanist','reception'],img:'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800'},{n:'Cardiff City Hall',c:'Cardiff',a:'Civic Centre',g:250,p:5900,cer:['civil','humanist','reception'],img:'https://images.unsplash.com/photo-1519167758481-83f29da8c2b0?w=800'}];
+const s={ceremony:'islam',place:'local',when:'flexible'};
+const gbp=n=>'\u00a3'+n.toLocaleString('en-GB');
+function paint(){
+cerGrid.innerHTML=C.map(x=>`<button class="cer ${s.ceremony===x.id?'on':''}" data-id="${x.id}"><img src="${x.i}"><b>${x.n}</b></button>`).join('');
+locGrid.innerHTML=P.map(x=>`<button class="pill ${s.place===x.id?'on':''}" data-place="${x.id}"><strong>${x.t}</strong></button>`).join('');
+whenGrid.innerHTML=W.map(x=>`<button class="pill ${s.when===x.id?'on':''}" data-when="${x.id}"><strong>${x.t}</strong></button>`).join('');
+cerGrid.querySelectorAll('[data-id]').forEach(e=>e.onclick=()=>{s.ceremony=e.dataset.id;paint()});
+locGrid.querySelectorAll('[data-place]').forEach(e=>e.onclick=()=>{s.place=e.dataset.place;paint()});
+whenGrid.querySelectorAll('[data-when]').forEach(e=>e.onclick=()=>{s.when=e.dataset.when;paint()});
+}
+function ok(h){
+if(!h.cer.includes(s.ceremony))return false;
+if(s.place==='anywhere')return true;
+if(s.place==='local')return h.c==='local'||['London','Birmingham','Manchester'].includes(h.c);
+return h.c===s.place;
+}
+function list(){
+const L=H.filter(ok);
+resultTitle.textContent=L.length+' halls available';
+hallList.innerHTML=L.map(h=>`<article class="hall"><img src="${h.img}"><div class="info"><h3>${h.n}</h3><p class="meta">${h.a} · ${h.c} · ${h.g} guests</p><p class="price">from ${gbp(h.p)}</p><p class="avail">${s.when} — ask to hold a date</p></div></article>`).join('')||'<p class="meta">Nothing matched. Try Anywhere UK.</p>';
+results.scrollIntoView({behavior:'smooth'});
+}
+paint();showBtn.onclick=list;list();
+</script></body></html>
