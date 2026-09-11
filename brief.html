@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Tell us what you need — The Wedding Company</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="logo" href="index.html">The Wedding Company<small>A path to unity</small></a>
+      <nav class="links">
+        <a href="index.html">Home</a>
+        <a href="login.html" class="login-link">Log in</a>
+      </nav>
+    </div>
+  </header>
+  <main class="page wrap">
+    <p class="sans" style="letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#8b3e2f">Start here</p>
+    <h1 style="opacity:1;animation:none;max-width:16ch">Tell us what you need</h1>
+    <p class="lede">Dates can be loose. We take this to halls, caterers and photographers for you. They confirm — you don’t chase twenty sites.</p>
+    <form class="form-wide" id="brief">
+      <div class="grid2">
+        <div><label for="name">Your name</label><input id="name" required /></div>
+        <div><label for="email">Email</label><input id="email" type="email" required /></div>
+      </div>
+      <div class="grid2">
+        <div><label for="phone">Phone</label><input id="phone" type="tel" /></div>
+        <div><label for="city">Area or city</label><input id="city" value="Birmingham" /></div>
+      </div>
+      <div class="grid2">
+        <div><label for="dateFrom">From (if you know)</label><input id="dateFrom" type="date" /></div>
+        <div><label for="dateTo">To</label><input id="dateTo" type="date" /></div>
+      </div>
+      <label for="dateNotes">Or say it in words</label>
+      <input id="dateNotes" placeholder="e.g. a Saturday in June, not half-term" />
+      <div class="grid2">
+        <div><label for="guests">Guests (rough)</label><input id="guests" type="number" min="1" placeholder="250" /></div>
+        <div><label for="ceremony">Ceremony</label>
+          <input id="ceremony" placeholder="Nikah, civil, church, reception only…" />
+        </div>
+      </div>
+      <label>What should we look for?</label>
+      <div class="ticks">
+        <label><input type="checkbox" name="svc" value="Hall"> Hall</label>
+        <label><input type="checkbox" name="svc" value="Catering"> Catering</label>
+        <label><input type="checkbox" name="svc" value="Photography"> Photography</label>
+        <label><input type="checkbox" name="svc" value="Videography"> Videography</label>
+        <label><input type="checkbox" name="svc" value="Makeup"> Makeup</label>
+        <label><input type="checkbox" name="svc" value="Florist"> Florist</label>
+        <label><input type="checkbox" name="svc" value="Cars"> Cars</label>
+        <label><input type="checkbox" name="svc" value="Decor"> Decor</label>
+      </div>
+      <label for="notes">Anything else</label>
+      <textarea id="notes" rows="5" placeholder="Halal kitchen, prayer room, parking, budget if you want to say…"></textarea>
+      <button class="btn solid ready" type="submit">Send to us</button>
+      <p class="notice" id="msg"></p>
+    </form>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script>
+    brief.onsubmit = async (e) => {
+      e.preventDefault();
+      const services = [...document.querySelectorAll("[name=svc]:checked")].map(x => x.value);
+      const row = {
+        name: name.value.trim(),
+        email: email.value.trim(),
+        phone: phone.value.trim(),
+        city: city.value.trim(),
+        date_from: dateFrom.value || null,
+        date_to: dateTo.value || null,
+        date_notes: dateNotes.value.trim(),
+        guests: guests.value ? Number(guests.value) : null,
+        ceremony: ceremony.value.trim(),
+        services,
+        notes: notes.value.trim(),
+        status: "new"
+      };
+      msg.textContent = "Sending…";
+      try {
+        const sb = await twcClient();
+        const { error } = await sb.from("briefs").insert(row);
+        if (error) throw error;
+        msg.textContent = "Received. We will take this to venues and suppliers and come back to you.";
+        brief.reset();
+      } catch (ex) {
+        msg.textContent = "Could not save yet (”" + (ex.message || "database") + "”). Run the briefs SQL in Supabase, then try again.";
+      }
+    };
+  </script>
+</body>
+</html>
