@@ -20,13 +20,20 @@
   <main class="page wrap">
     <p class="sans" style="letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#8b3e2f">Birmingham first</p>
     <h1 style="opacity:1;animation:none;max-width:18ch">Halls and mosques</h1>
-    <p class="lede">Public listings for Birmingham. Unclaimed — the venue has not logged in yet. Capacities and phones are from published pages and must be confirmed.</p>
-    <div class="cards" id="list" style="margin-top:22px"></div>
+    <p class="lede">Public listings for Birmingham. Unclaimed — confirm capacities with the venue.</p>
+    <div class="cards list-cards" id="list" style="margin-top:22px"></div>
   </main>
   <footer class="wrap"><span>The Wedding Company</span></footer>
   <script src="providers-data.js"></script>
   <script>
-    list.innerHTML = PROVIDERS.map(p => `<a class="card in door" href="provider.html?id=${p.id}"><h3>${p.name}</h3><p>${p.address}<br>${p.services.join(", ")}<br>${p.capacity}</p></a>`).join("");
+    list.innerHTML = PROVIDERS.map(p => `
+      <a class="card in row-card" href="provider.html?id=${p.id}">
+        <div class="thumb"><img src="${p.photos[0]}" alt=""></div>
+        <div class="row-copy">
+          <h3>${p.name}</h3>
+          <p>${p.address}<br>${p.services.join(", ")}</p>
+        </div>
+      </a>`).join("");
   </script>
   <script src="app.js"></script>
 </body>
