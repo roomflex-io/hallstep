@@ -21,11 +21,14 @@
     <h1 style="opacity:1;animation:none;max-width:16ch">Everything</h1>
     <p class="lede" id="who"></p>
     <div class="facts">
+      <div class="fact"><b id="cBriefs">—</b>Briefs to work</div>
       <div class="fact"><b id="cCouples">—</b>Couples</div>
       <div class="fact"><b id="cProviders">—</b>Providers</div>
-      <div class="fact"><b id="cEnquiries">—</b>Enquiries</div>
-      <div class="fact"><b id="cConfirmed">—</b>Confirmed bookings</div>
+      <div class="fact"><b id="cConfirmed">—</b>Confirmed</div>
     </div>
+    <h2 style="margin-top:28px">Incoming briefs</h2>
+    <p class="lede">Call halls and suppliers from these. Mark them in your head for now — status edits come next.</p>
+    <div id="tblB" class="legal"></div>
     <h2 style="margin-top:28px">Couples</h2>
     <div id="tblC" class="legal"></div>
     <h2 style="margin-top:28px">Providers</h2>
@@ -41,18 +44,21 @@
         if (!gate) return;
         who.textContent = gate.profile.email;
         out.onclick = async (e) => { e.preventDefault(); await sb.auth.signOut(); location.href = "login.html"; };
+        const briefs = await sb.from("briefs").select("*").order("created_at", { ascending: false });
         const couples = await sb.from("couples").select("id,city,partner_names,profiles(email,full_name)");
         const providers = await sb.from("providers").select("id,business_name,city,email,published");
         const enquiries = await sb.from("enquiries").select("id,status");
+        const bl = briefs.data || [];
         const cl = couples.data || [];
         const pl = providers.data || [];
         const el = enquiries.data || [];
+        cBriefs.textContent = bl.length;
         cCouples.textContent = cl.length;
         cProviders.textContent = pl.length;
-        cEnquiries.textContent = el.length;
         cConfirmed.textContent = el.filter(x => x.status === "confirmed").length;
-        tblC.innerHTML = cl.length ? cl.map(c => `<p>${(c.profiles && c.profiles.full_name) || "—"} · ${(c.profiles && c.profiles.email) || ""} · ${c.city || ""}</p>`).join("") : "<p>No couple accounts yet.</p>";
-        tblP.innerHTML = pl.length ? pl.map(p => `<p>${p.business_name} · ${p.city || ""} · ${p.published ? "live" : "draft"}</p>`).join("") : "<p>No provider accounts yet.</p>";
+        tblB.innerHTML = bl.length ? bl.map(b => `<p><strong>${b.name}</strong> · ${b.email} · ${b.phone || ""}<br>${b.city || ""} · ${b.date_notes || [b.date_from,b.date_to].filter(Boolean).join(" → ") || "dates tbc"} · ${b.guests || "?"} guests · ${b.ceremony || ""}<br>${(b.services || []).join(", ")}<br>${b.notes || ""}</p>`).join("") : "<p>No briefs yet. Couples use Tell us what you need.</p>";
+        tblC.innerHTML = cl.length ? cl.map(c => `<p>${(c.profiles && c.profiles.full_name) || "—"} · ${(c.profiles && c.profiles.email) || ""}</p>`).join("") : "<p>No couple accounts yet.</p>";
+        tblP.innerHTML = pl.length ? pl.map(p => `<p>${p.business_name} · ${p.city || ""}</p>`).join("") : "<p>No signed-up providers yet.</p>";
       } catch (ex) {
         who.textContent = ex.message;
       }
