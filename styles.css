@@ -31,7 +31,7 @@ header {
 .nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .logo { font-size: 18px; }
 .logo small { display: block; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.links { display: flex; gap: 16px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 13px; color: var(--muted); }
+.links { display: flex; gap: 12px; flex-wrap: wrap; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 13px; color: var(--muted); align-items: center; }
 .links a[aria-current="page"] { color: var(--ink); }
 .hero {
   position: relative; margin: 16px auto 0;
@@ -87,3 +87,27 @@ footer {
   font-size: 12px; color: var(--muted);
   display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
 }
+.links .login-link { color: #fff; background: #1c1713; padding: 8px 12px; border-radius: 999px; }
+.doors { display: grid; gap: 12px; margin-top: 22px; }
+@media (min-width: 700px) { .doors { grid-template-columns: 1fr 1fr; } }
+.door { display: block; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: 22px; opacity: 1; }
+.door h3 { font-size: 26px; font-weight: 500; margin-bottom: 8px; }
+.ticks { display: flex; flex-wrap: wrap; gap: 8px; }
+.ticks label { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 8px 12px; color: var(--ink); font-size: 13px; }
+.ticks input { width: auto; accent-color: var(--accent); }
+.form-wide { max-width: 720px; }
+.sec { margin-top: 28px; }
+.sec h3 { font-size: 22px; font-weight: 500; margin-bottom: 10px; }
+.grid2 { display: grid; gap: 12px; }
+@media (min-width: 700px) { .grid2 { grid-template-columns: 1fr 1fr; } }
+.gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+@media (min-width: 800px) { .gallery { grid-template-columns: 1fr 1fr 1fr; } }
+.gallery .tall { grid-column: span 2; min-height: 220px; border-radius: 16px; overflow: hidden; background: #d7c8b4; }
+.gallery div { min-height: 140px; border-radius: 16px; overflow: hidden; background: #d7c8b4; }
+.facts { display: grid; gap: 10px; margin: 18px 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; }
+@media (min-width: 700px) { .facts { grid-template-columns: 1fr 1fr; } }
+.fact { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+.fact b { display: block; font-family: Georgia, serif; font-size: 16px; font-weight: 500; }
+.notice { font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 13px; color: var(--muted); margin-top: 8px; }
+.hero.short { min-height: min(48dvh, 420px); }
+.btn.ready { opacity: 1; animation: none; }
