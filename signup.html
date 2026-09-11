@@ -10,9 +10,7 @@
   <header>
     <div class="wrap nav">
       <a class="logo" href="index.html">The Wedding Company<small>A path to unity</small></a>
-      <nav class="links">
-        <a href="login.html" class="login-link">Log in</a>
-      </nav>
+      <nav class="links"><a href="login.html" class="login-link">Log in</a></nav>
     </div>
   </header>
   <main class="page wrap">
@@ -26,19 +24,38 @@
       <button class="btn solid ready" type="submit">Create account</button>
       <p class="notice" id="msg"></p>
     </form>
-    <p class="lede" style="margin-top:16px"><a href="login.html"><u>Already have an account</u></a></p>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
   <script>
-    const role = new URLSearchParams(location.search).get("role") || "couple";
+    const role = new URLSearchParams(location.search).get("role") === "provider" ? "provider" : "couple";
     title.textContent = role === "provider" ? "Provider account" : "Couple account";
-    lede.textContent = role === "provider"
-      ? "After this, you fill in the listing: photos, address, services."
-      : "After this, your wedding plan lives here.";
-    su.onsubmit = (e) => {
+    lede.textContent = role === "provider" ? "You will then fill in the listing." : "Your wedding plan will live here.";
+    su.onsubmit = async function (e) {
       e.preventDefault();
-      msg.textContent = "Sign-up is designed. It will save for real when the database is connected. For now only SuperAdmin can enter a dashboard.";
+      msg.textContent = "Creating account…";
+      try {
+        const sb = await twcClient();
+        const { data, error } = await sb.auth.signUp({
+          email: document.getElementById("email").value.trim(),
+          password: document.getElementById("password").value,
+          options: {
+            data: {
+              full_name: document.getElementById("name").value.trim(),
+              role: role
+            }
+          }
+        });
+        if (error) throw error;
+        if (data.session) {
+          location.href = role === "provider" ? "provider-setup.html" : "couple.html";
+        } else {
+          msg.textContent = "Check your email to confirm the account, then log in.";
+        }
+      } catch (ex) {
+        msg.textContent = ex.message || "Could not create account";
+      }
     };
   </script>
-  <script src="app.js"></script>
 </body>
 </html>

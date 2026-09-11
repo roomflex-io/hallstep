@@ -20,16 +20,9 @@
   <main class="page wrap">
     <p class="sans" style="letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#8b3e2f">Account</p>
     <h1 style="opacity:1;animation:none;max-width:12ch">Log in</h1>
-    <p class="lede">Email and password. SuperAdmin is not advertised on this page.</p>
     <form id="loginForm">
-      <div>
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" autocomplete="username" required />
-      </div>
-      <div>
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" autocomplete="current-password" required />
-      </div>
+      <div><label for="email">Email</label><input id="email" type="email" autocomplete="username" required /></div>
+      <div><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required /></div>
       <p class="notice" id="err" style="color:#8b3e2f"></p>
       <button class="btn solid ready" type="submit">Log in</button>
     </form>
@@ -39,21 +32,29 @@
       <a class="door" href="signup.html?role=provider"><h3>Create a provider account</h3><p class="lede">Hall, catering, photo and the rest.</p></a>
     </div>
   </main>
-  <footer class="wrap"><span>The Wedding Company</span><span><a href="privacy.html">Privacy</a></span></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
   <script>
-    document.getElementById("loginForm").onsubmit = function (e) {
+    document.getElementById("loginForm").onsubmit = async function (e) {
       e.preventDefault();
-      var em = document.getElementById("email").value.trim().toLowerCase();
-      var pass = document.getElementById("password").value;
-      if (em === "admin@theweddingcompany" && pass === "AshlarAdmin1") {
-        sessionStorage.setItem("twcRole", "superadmin");
-        sessionStorage.setItem("twcEmail", em);
-        location.href = "admin.html";
-        return;
+      const err = document.getElementById("err");
+      err.textContent = "Signing in…";
+      try {
+        const sb = await twcClient();
+        const { data, error } = await sb.auth.signInWithPassword({
+          email: document.getElementById("email").value.trim(),
+          password: document.getElementById("password").value
+        });
+        if (error) throw error;
+        const { data: profile } = await sb.from("profiles").select("role").eq("id", data.user.id).single();
+        const role = profile && profile.role;
+        if (role === "superadmin") location.href = "admin.html";
+        else if (role === "provider") location.href = "provider-setup.html";
+        else location.href = "couple.html";
+      } catch (ex) {
+        err.textContent = ex.message || "Could not sign in";
       }
-      document.getElementById("err").textContent = "No live couple or provider accounts yet. SuperAdmin can enter the dashboard.";
     };
   </script>
-  <script src="app.js"></script>
 </body>
 </html>

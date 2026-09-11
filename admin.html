@@ -12,33 +12,51 @@
       <a class="logo" href="index.html">The Wedding Company<small>SuperAdmin</small></a>
       <nav class="links">
         <a href="admin.html" aria-current="page">Overview</a>
-        <a href="index.html" id="out">Log out</a>
+        <a href="#" id="out">Log out</a>
       </nav>
     </div>
   </header>
-  <main class="page wrap" id="gate">
+  <main class="page wrap">
     <p class="sans" style="letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#8b3e2f">SuperAdmin</p>
     <h1 style="opacity:1;animation:none;max-width:16ch">Everything</h1>
-    <p class="lede">Live counts. Nothing is invented here — the books are empty until people sign up.</p>
+    <p class="lede" id="who"></p>
     <div class="facts">
-      <div class="fact"><b id="cCouples">0</b>Couples</div>
-      <div class="fact"><b id="cProviders">0</b>Providers</div>
-      <div class="fact"><b id="cEnquiries">0</b>Enquiries</div>
-      <div class="fact"><b id="cConfirmed">0</b>Confirmed bookings</div>
+      <div class="fact"><b id="cCouples">—</b>Couples</div>
+      <div class="fact"><b id="cProviders">—</b>Providers</div>
+      <div class="fact"><b id="cEnquiries">—</b>Enquiries</div>
+      <div class="fact"><b id="cConfirmed">—</b>Confirmed bookings</div>
     </div>
     <h2 style="margin-top:28px">Couples</h2>
-    <p class="lede" id="emptyC">No couple accounts yet.</p>
-    <div id="tblC"></div>
+    <div id="tblC" class="legal"></div>
     <h2 style="margin-top:28px">Providers</h2>
-    <p class="lede" id="emptyP">No provider accounts yet.</p>
-    <div id="tblP"></div>
+    <div id="tblP" class="legal"></div>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
   <script>
-    if (sessionStorage.getItem("twcRole") !== "superadmin") {
-      location.replace("login.html");
-    }
-    out.onclick = (e) => { e.preventDefault(); sessionStorage.clear(); location.href = "login.html"; };
+    (async function () {
+      try {
+        const sb = await twcClient();
+        const gate = await twcRequireAdmin(sb);
+        if (!gate) return;
+        who.textContent = gate.profile.email;
+        out.onclick = async (e) => { e.preventDefault(); await sb.auth.signOut(); location.href = "login.html"; };
+        const couples = await sb.from("couples").select("id,city,partner_names,profiles(email,full_name)");
+        const providers = await sb.from("providers").select("id,business_name,city,email,published");
+        const enquiries = await sb.from("enquiries").select("id,status");
+        const cl = couples.data || [];
+        const pl = providers.data || [];
+        const el = enquiries.data || [];
+        cCouples.textContent = cl.length;
+        cProviders.textContent = pl.length;
+        cEnquiries.textContent = el.length;
+        cConfirmed.textContent = el.filter(x => x.status === "confirmed").length;
+        tblC.innerHTML = cl.length ? cl.map(c => `<p>${(c.profiles && c.profiles.full_name) || "—"} · ${(c.profiles && c.profiles.email) || ""} · ${c.city || ""}</p>`).join("") : "<p>No couple accounts yet.</p>";
+        tblP.innerHTML = pl.length ? pl.map(p => `<p>${p.business_name} · ${p.city || ""} · ${p.published ? "live" : "draft"}</p>`).join("") : "<p>No provider accounts yet.</p>";
+      } catch (ex) {
+        who.textContent = ex.message;
+      }
+    })();
   </script>
-  <script src="app.js"></script>
 </body>
 </html>
