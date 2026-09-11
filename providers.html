@@ -12,8 +12,6 @@
       <a class="logo" href="index.html">The Wedding Company<small>A path to unity</small></a>
       <nav class="links">
         <a href="index.html">Home</a>
-        <a href="providers.html" aria-current="page">Providers</a>
-        <a href="contact.html">Contact</a>
         <a href="login.html" class="login-link">Log in</a>
       </nav>
     </div>
@@ -21,14 +19,9 @@
   <main class="page wrap">
     <p class="sans" style="letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#8b3e2f">Directory</p>
     <h1 style="opacity:1;animation:none;max-width:16ch">Providers</h1>
-    <p class="lede">Open a listing for photos, services, address and contact. They confirm the booking.</p>
-    <div class="cards" id="list" style="margin-top:22px"></div>
+    <p class="lede">When a hall, caterer or photographer creates a listing, it will show here. There are none yet.</p>
   </main>
-  <footer class="wrap"><span>The Wedding Company</span><span><a href="privacy.html">Privacy</a></span></footer>
-  <script src="providers-data.js"></script>
-  <script>
-    list.innerHTML = PROVIDERS.map(p => `<a class="card in door" href="provider.html?id=${p.id}"><div style="height:140px;border-radius:12px;overflow:hidden;margin-bottom:12px;background:#d7c8b4"><img src="${p.photos[0]}" alt=""></div><h3>${p.name}</h3><p>${p.city} · ${p.services.join(", ")}</p></a>`).join("");
-  </script>
+  <footer class="wrap"><span>The Wedding Company</span></footer>
   <script src="app.js"></script>
 </body>
 </html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Create account — The Wedding Company</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="logo" href="index.html">The Wedding Company<small>A path to unity</small></a>
+      <nav class="links">
+        <a href="login.html" class="login-link">Log in</a>
+      </nav>
+    </div>
+  </header>
+  <main class="page wrap">
+    <p class="sans" style="letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#8b3e2f">Sign up</p>
+    <h1 style="opacity:1;animation:none;max-width:14ch" id="title">Create account</h1>
+    <p class="lede" id="lede"></p>
+    <form id="su">
+      <div><label for="name">Name</label><input id="name" required /></div>
+      <div><label for="email">Email</label><input id="email" type="email" required /></div>
+      <div><label for="password">Password</label><input id="password" type="password" minlength="8" required /></div>
+      <button class="btn solid ready" type="submit">Create account</button>
+      <p class="notice" id="msg"></p>
+    </form>
+    <p class="lede" style="margin-top:16px"><a href="login.html"><u>Already have an account</u></a></p>
+  </main>
+  <script>
+    const role = new URLSearchParams(location.search).get("role") || "couple";
+    title.textContent = role === "provider" ? "Provider account" : "Couple account";
+    lede.textContent = role === "provider"
+      ? "After this, you fill in the listing: photos, address, services."
+      : "After this, your wedding plan lives here.";
+    su.onsubmit = (e) => {
+      e.preventDefault();
+      msg.textContent = "Sign-up is designed. It will save for real when the database is connected. For now only SuperAdmin can enter a dashboard.";
+    };
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>SuperAdmin — The Wedding Company</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="logo" href="index.html">The Wedding Company<small>SuperAdmin</small></a>
+      <nav class="links">
+        <a href="admin.html" aria-current="page">Overview</a>
+        <a href="index.html" id="out">Log out</a>
+      </nav>
+    </div>
+  </header>
+  <main class="page wrap" id="gate">
+    <p class="sans" style="letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#8b3e2f">SuperAdmin</p>
+    <h1 style="opacity:1;animation:none;max-width:16ch">Everything</h1>
+    <p class="lede">Live counts. Nothing is invented here — the books are empty until people sign up.</p>
+    <div class="facts">
+      <div class="fact"><b id="cCouples">0</b>Couples</div>
+      <div class="fact"><b id="cProviders">0</b>Providers</div>
+      <div class="fact"><b id="cEnquiries">0</b>Enquiries</div>
+      <div class="fact"><b id="cConfirmed">0</b>Confirmed bookings</div>
+    </div>
+    <h2 style="margin-top:28px">Couples</h2>
+    <p class="lede" id="emptyC">No couple accounts yet.</p>
+    <div id="tblC"></div>
+    <h2 style="margin-top:28px">Providers</h2>
+    <p class="lede" id="emptyP">No provider accounts yet.</p>
+    <div id="tblP"></div>
+  </main>
+  <script>
+    if (sessionStorage.getItem("twcRole") !== "superadmin") {
+      location.replace("login.html");
+    }
+    out.onclick = (e) => { e.preventDefault(); sessionStorage.clear(); location.href = "login.html"; };
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

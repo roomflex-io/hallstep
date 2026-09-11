@@ -12,7 +12,6 @@
       <a class="logo" href="index.html">The Wedding Company<small>A path to unity</small></a>
       <nav class="links">
         <a href="index.html">Home</a>
-        <a href="providers.html">Providers</a>
         <a href="contact.html">Contact</a>
         <a href="login.html" aria-current="page" class="login-link">Log in</a>
       </nav>
@@ -20,20 +19,41 @@
   </header>
   <main class="page wrap">
     <p class="sans" style="letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#8b3e2f">Account</p>
-    <h1 style="opacity:1;animation:none;max-width:16ch">Log in</h1>
-    <p class="lede">Two doors. Couples plan the day. Providers list their work and confirm bookings.</p>
+    <h1 style="opacity:1;animation:none;max-width:12ch">Log in</h1>
+    <p class="lede">Use the email for your account. SuperAdmin is not listed here on purpose.</p>
+    <form id="loginForm">
+      <div>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="username" required />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required />
+      </div>
+      <p class="notice" id="err" style="color:#8b3e2f"></p>
+      <button class="btn solid ready" type="submit">Log in</button>
+    </form>
+    <p class="lede" style="margin-top:28px">New here?</p>
     <div class="doors">
-      <a class="door" href="couple.html">
-        <h3>I’m planning a wedding</h3>
-        <p class="lede">Keep the path in one place. Enquire, then wait for the provider to confirm.</p>
-      </a>
-      <a class="door" href="provider-setup.html">
-        <h3>I provide a service</h3>
-        <p class="lede">Hall, catering, photography and the rest. Build a profile couples can open.</p>
-      </a>
+      <a class="door" href="signup.html?role=couple"><h3>Create a couple account</h3><p class="lede">Plan the wedding in one place.</p></a>
+      <a class="door" href="signup.html?role=provider"><h3>Create a provider account</h3><p class="lede">Hall, catering, photo and the rest.</p></a>
     </div>
   </main>
   <footer class="wrap"><span>The Wedding Company</span><span><a href="privacy.html">Privacy</a></span></footer>
+  <script>
+    loginForm.onsubmit = (e) => {
+      e.preventDefault();
+      const email = email.value.trim().toLowerCase();
+      const pass = password.value;
+      if (email === "admin@theweddingcompany" && pass === "AshlarAdmin1") {
+        sessionStorage.setItem("twcRole", "superadmin");
+        sessionStorage.setItem("twcEmail", email);
+        location.href = "admin.html";
+        return;
+      }
+      err.textContent = "No live accounts yet. SuperAdmin can log in. Couple and provider logins connect when the database is on.";
+    };
+  </script>
   <script src="app.js"></script>
 </body>
 </html>
