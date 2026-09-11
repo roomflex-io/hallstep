@@ -1,0 +1,12 @@
+{
+  "name": "The Wedding Company",
+  "short_name": "Wedding Co",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4efe6",
+  "theme_color": "#1c1713",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
